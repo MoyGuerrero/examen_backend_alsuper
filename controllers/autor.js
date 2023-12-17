@@ -1,5 +1,6 @@
 const { response } = require("express")
-const { dbConnection } = require("../db/db")
+const { dbConnection } = require("../db/db");
+const BooksByAutor = require("../model/getCountBookByAutor");
 
 
 const getAutores = async (req, res = response) => {
@@ -122,9 +123,14 @@ const getCountBooksAllAutores = async (req, res = response) => {
                     });
                 }
 
-                res.json({
-                    res: respuesta.recordset
+                // res.json({
+                //     res: respuesta.recordset
+                // });
+                const booksByAutor = respuesta.recordset.map(books => {
+                    console.log(books);
+                    return new BooksByAutor(books.Nombre, books.Libros);
                 });
+                res.json(booksByAutor);
             })
 
     } catch (error) {
